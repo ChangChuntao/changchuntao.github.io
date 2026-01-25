@@ -1,10 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>我的个人主页</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常春涛 (Chuntao Chang) - 武汉大学博士研究生</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+        .card { transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+    </style>
 </head>
-<body>
-    <h1>欢迎来到我的网站！</h1>
-    <p>这是我用 Git 和 GitHub Pages 搭建的第一个网页。</p>
+<body class="bg-gray-50 text-gray-800">
+
+    <header class="hero-gradient text-white py-16 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+            <div class="w-40 h-52 bg-gray-200 rounded-lg overflow-hidden shadow-xl border-4 border-white/20">
+                <img src="https://via.placeholder.com/160x208?text=Chang+CT" alt="常春涛" class="w-full h-full object-cover">
+            </div>
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-4xl font-bold mb-2">常春涛 (Chuntao Chang)</h1>
+                <p class="text-xl opacity-90 mb-4">武汉大学 · 大地测量学与测量工程 · 博士研究生 [cite: 4]</p>
+                <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm">
+                    <span><i class="fas fa-envelope mr-2"></i>chuntaochang@whu.edu.cn [cite: 1]</span>
+                    <span><i class="fas fa-location-dot mr-2"></i>中国 · 武汉 [cite: 1, 4]</span>
+                    <a href="https://github.com/ChangChuntao" class="hover:text-blue-200 transition"><i class="fab fa-github mr-2"></i>GitHub</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto py-12 px-4 space-y-16">
+
+        <section>
+            <h2 class="text-2xl font-bold border-b-4 border-blue-500 inline-block mb-8">关于我 / Biography</h2>
+            <p class="text-lg leading-relaxed text-gray-700">
+                我目前是武汉大学大地测量学与测量工程专业的博士研究生，师从赵齐乐教授与李敏教授 [cite: 4]。主要研究方向为<b>高精度低轨（LEO）卫星轨道确定与预报</b>、<b>GNSS/LEO联合导航增强</b>以及<b>大气阻力模型精化</b> [cite: 11, 62]。
+                我开发了多款开源及工程化软件，其中 <b>FAST</b> 软件在 GitHub 获得了 12k+ 的浏览量 [cite: 49, 50]。
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold border-b-4 border-blue-500 inline-block mb-8">教育背景 / Education</h2>
+            <div class="space-y-6">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg">武汉大学 (Wuhan University)</h3>
+                        <p class="text-gray-600 italic">博士研究生 · 大地测量学与测量工程 [cite: 4]</p>
+                    </div>
+                    <span class="text-blue-600 font-semibold">2022.09 - 至今 [cite: 4]</span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg">中国测绘科学研究院</h3>
+                        <p class="text-gray-600 italic">硕士 · 大地测量学与测量工程 [cite: 5]</p>
+                    </div>
+                    <span class="text-gray-500">2019.09 - 2022.06 [cite: 5]</span>
+                </div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-bold text-lg">山东理工大学</h3>
+                        <p class="text-gray-600 italic">学士 · 测绘工程 [cite: 6]</p>
+                    </div>
+                    <span class="text-gray-500">2013.09 - 2017.06 [cite: 6]</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold border-b-4 border-blue-500 inline-block mb-8">软件作品 / Open Source & Software</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-blue-700 text-xl mb-2">FAST</h3>
+                    <p class="text-gray-600 text-sm mb-4">开源GNSS数据预处理软件，Git浏览量12k+，应用于未来导航/GF7A/ZY3C等系列卫星 [cite: 49]。</p>
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded">C++</span>
+                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Open Source</span>
+                    </div>
+                </div>
+                <div class="card bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-blue-700 text-xl mb-2">PANDA</h3>
+                    <p class="text-gray-600 text-sm mb-4">LEO机动期间轨道确定与预报，正开发GNSS/LEO超快速定轨系统 [cite: 50]。</p>
+                    <div class="flex gap-2 text-xs">
+                        <span class="px-2 py-1 bg-purple-100 text-purple-700 rounded">Fortran</span>
+                        <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded">High Precision</span>
+                    </div>
+                </div>
+                <div class="card bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-blue-700 text-xl mb-2">gPosPy</h3>
+                    <p class="text-gray-600 text-sm mb-4">基于Python开发的支持LEO增强的GNSS PPP软件 [cite: 51]。</p>
+                    <div class="flex gap-2">
+                        <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded">Python</span>
+                    </div>
+                </div>
+                <div class="card bg-white p-6 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="font-bold text-blue-700 text-xl mb-2">BrdcFit</h3>
+                    <p class="text-gray-600 text-sm mb-4">GNSS/LEO/GEO等多类型卫星广播星历参数拟合软件 [cite: 52]。</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-bold border-b-4 border-blue-500 inline-block mb-8">代表性论文 / Selected Publications</h2>
+            <ul class="space-y-4 text-gray-700">
+                <li class="pl-4 border-l-4 border-gray-200">
+                    <strong>Chang C</strong>, Zhao Q, Li M, et al. Augmentation message design for LEO-enhanced precise positioning: In-orbit performance assessment. <strong>Measurement</strong>, 2025. (中科院二区TOP) [cite: 29, 30]
+                </li>
+                <li class="pl-4 border-l-4 border-gray-200">
+                    <strong>Chang C</strong>, Mu R, et al. FAST: An Open-Source Software for GNSS Data Download and Quality Analysis. <strong>GPS Solutions</strong>. (一审中) [cite: 31, 32]
+                </li>
+                <li class="pl-4 border-l-4 border-gray-200">
+                    Li M, Mu R, ..., <strong>Chang C</strong>, et al. Precise orbit determination for the Haiyang-2D satellite using new onboard BDS-3 B1C/B2a signal measurements. <strong>GPS Solutions</strong>, 2022. [cite: 35, 36]
+                </li>
+            </ul>
+        </section>
+
+        <section class="bg-blue-50 p-8 rounded-2xl">
+            <h2 class="text-2xl font-bold mb-8 text-blue-900">专业技能 / Skills</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="font-bold mb-2">编程语言</h4>
+                    <ul class="text-sm space-y-1 text-blue-800">
+                        <li>Fortran / Matlab [cite: 61]</li>
+                        <li>Python (软件开发) [cite: 61]</li>
+                        <li>C / C++ [cite: 61]</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">研究领域</h4>
+                    <ul class="text-sm space-y-1 text-blue-800">
+                        <li>精密定轨 (POD) [cite: 62]</li>
+                        <li>LEO 导航增强 [cite: 62]</li>
+                        <li>广播星历设计 [cite: 62]</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">工作环境</h4>
+                    <ul class="text-sm space-y-1 text-blue-800">
+                        <li>Linux / Shell [cite: 61]</li>
+                        <li>Git / GitHub</li>
+                        <li>Numerical Simulation [cite: 62]</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2">学术交流</h4>
+                    <ul class="text-sm space-y-1 text-blue-800">
+                        <li>IAG GGOS JSG3 [cite: 56]</li>
+                        <li>CPGPS 论坛 [cite: 58]</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12 text-center text-sm opacity-60">
+        <p>&copy; 2026 Chuntao Chang. Built with Tailwind CSS & GitHub Pages.</p>
+    </footer>
+
 </body>
 </html>
