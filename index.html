@@ -1,304 +1,440 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chuntao Chang | 武汉大学卫星导航定位技术研究中心</title>
+    <title>Chuntao Chang | Wuhan University</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Newsreader', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            850: '#151b28',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        whu: {
+                            blue: '#005bac', // 武大近似蓝
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Inter:wght@400;900&family=JetBrains+Mono&display=swap');
-        
-        :root { --glow-blue: rgba(59, 130, 246, 0.15); --glow-purple: rgba(168, 85, 247, 0.15); }
-        
-        body { background-color: #000; color: #d1d5db; font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        
-        /* 高级暗色底光背景 */
-        .ambient-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
-            background: radial-gradient(circle at 20% 30%, var(--glow-blue), transparent 40%),
-                        radial-gradient(circle at 80% 70%, var(--glow-purple), transparent 40%);
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
         }
 
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .heading-font { font-family: 'Space Grotesk', sans-serif; }
+        /* 背景：专业的深色网格，代替星星 */
+        .academic-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-color: #0b0c10;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
 
-        /* 动态高级卡片 */
+        /* 顶部微光 */
+        .glow-top {
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        /* 玻璃拟态卡片 - 更克制、更平滑 */
         .glass-card {
-            background: rgba(15, 17, 21, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: rgba(20, 25, 35, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
         }
+        
         .glass-card:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: translateY(-8px);
-            background: rgba(20, 25, 31, 0.8);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+            border-color: rgba(96, 165, 250, 0.4);
+            background: rgba(30, 41, 59, 0.7);
+            transform: translateY(-2px);
         }
 
-        .hero-title { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1; color: #fff; letter-spacing: -0.02em; }
-        
-        .gradient-border {
-            position: relative; border-radius: 12px;
+        /* 链接下划线动画 */
+        .link-underline {
+            position: relative;
+            text-decoration: none;
         }
-        .gradient-border::after {
-            content: ""; position: absolute; inset: 0; border-radius: 12px;
-            padding: 1px; background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.3), transparent);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+        .link-underline::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: #60a5fa;
+            transition: width 0.3s ease-out;
+        }
+        .link-underline:hover::after {
+            width: 100%;
+        }
+
+        /* 论文列表标记 */
+        .paper-tag {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            letter-spacing: 0.05em;
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased selection:bg-blue-500/30 selection:text-blue-100">
 
-    <div class="ambient-bg"></div>
+    <div class="academic-bg"></div>
+    <div class="glow-top"></div>
 
-    <header class="py-12 px-8 md:px-24 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
-        <div class="flex-1">
-            <div class="flex items-center gap-6 mb-8">
+    <header class="max-w-6xl mx-auto px-6 pt-20 pb-16">
+        <div class="flex flex-col md:flex-row gap-10 items-start md:items-center justify-between border-b border-white/5 pb-12">
+            
+            <div class="flex items-center gap-8">
                 <div class="relative group">
-                    <div class="absolute -inset-1 bg-blue-500 rounded-lg blur opacity-20 group-hover:opacity-40 transition"></div>
-                    <img src="avatar.jpg" class="relative w-24 h-32 object-cover rounded-lg border border-white/10" onerror="this.src='https://via.placeholder.com/100x150?text=PHD'">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-lg blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                    <img src="avatar.jpg" class="relative w-28 h-28 object-cover rounded-lg border border-white/10 bg-gray-900" onerror="this.src='https://ui-avatars.com/api/?name=CC&background=0f172a&color=cbd5e1&size=128'">
                 </div>
                 <div>
-                    <p class="mono text-xs font-bold tracking-[0.3em] text-blue-500 uppercase mb-2">Wuhan University / PHD Candidate</p>
-                    <h1 class="hero-title heading-font">常春涛</h1>
-                    <h1 class="hero-title heading-font">CHUNTAO CHANG</h1>
+                    <h1 class="text-4xl md:text-5xl font-serif font-medium text-white tracking-tight mb-2">常春涛 <span class="text-2xl text-gray-500 font-light italic ml-2">Chuntao Chang</span></h1>
+                    <div class="flex items-center gap-2 text-blue-400 font-mono text-sm font-medium mb-3">
+                        <span class="bg-blue-500/10 px-2 py-1 rounded border border-blue-500/20">PHD CANDIDATE</span>
+                        <span>@ WUHAN UNIVERSITY</span>
+                    </div>
+                    <p class="text-gray-400 font-light max-w-xl">
+                        专注于高精度 GNSS/LEO 轨道确定与预报、低轨卫星增强导航定位研究。
+                    </p>
                 </div>
             </div>
-            <div class="text-2xl text-gray-400 font-light max-w-4xl leading-relaxed italic">
-                武汉大学卫星导航定位技术研究中心<br>
-                <span class="text-white font-bold not-italic text-2xl mt-2 block">高精度GNSS/LEO轨道确定与预报</span>
-                <span class="text-white font-bold not-italic text-2xl mt-2 block">低轨卫星增强导航定位</span>
+
+            <div class="flex flex-col gap-3 text-sm font-mono text-gray-400">
+                <a href="mailto:chuntaochang@whu.edu.cn" class="hover:text-blue-400 transition flex items-center gap-3">
+                    <i class="fas fa-envelope w-4"></i> chuntaochang@whu.edu.cn
+                </a>
+                <a href="https://github.com/changchuntao" target="_blank" class="hover:text-white transition flex items-center gap-3">
+                    <i class="fab fa-github w-4"></i> github.com/changchuntao
+                </a>
+                <span class="flex items-center gap-3">
+                    <i class="fas fa-phone w-4"></i> +86 15064302902
+                </span>
             </div>
-        </div>
-        <div class="glass-card p-6 text-right mono text-xs space-y-3 border-l-4 border-blue-500 h-auto">
-            <a href="mailto:chuntaochang@whu.edu.cn" class="block hover:text-blue-400 transition">CHUNTAOCHANG@WHU.EDU.CN</a>
-            <p class="text-gray-500 tracking-widest">GITHUB.COM/CHANGCHUNTAO</p>
-            <p class="text-gray-500">+86 15064302902</p>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-8 md:px-24 py-12 space-y-32">
+    <main class="max-w-6xl mx-auto px-6 space-y-24 pb-24">
 
-        <section id="software">
-            <div class="flex items-center gap-4 mb-12">
-                <h2 class="heading-font text-3xl font-black text-white uppercase tracking-tighter italic">01 Software System</h2>
-                <div class="h-px flex-1 bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+        <section id="fast-software">
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-serif text-white">Open Source Project</h2>
+                <div class="h-px bg-white/10 flex-1"></div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <div class="glass-card rounded-2xl p-1 overflow-hidden relative group">
+                <div class="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 w-full"></div>
                 
-                <div class="glass-card p-10 gradient-border group">
-                    <div>
-                        <div class="flex justify-between items-start mb-6">
-                            <h3 class="text-4xl font-black text-white italic group-hover:text-blue-400 transition">FAST</h3>
-                            <div class="text-right">
-                                <span class="text-blue-500 font-black text-4xl mono drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]">12k+</span>
-                                <p class="text-[10px] text-gray-600 mono font-bold tracking-widest mt-1">GIT IMPRESSIONS</p>
+                <div class="p-8 md:p-10 grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <div class="lg:col-span-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-baseline gap-3 mb-2">
+                                <h3 class="text-4xl font-bold font-mono text-white tracking-tighter">FAST</h3>
+                                <span class="text-xs font-mono text-blue-400">v3.00.03</span>
+                            </div>
+                            <p class="text-lg text-gray-300 font-serif italic mb-6">
+                                File Download and Signal Processing Toolkit for GNSS
+                            </p>
+                            <p class="text-sm text-gray-400 leading-relaxed mb-8">
+                                一个基于 Python 开发的高效多模 GNSS 数据预处理框架。集成了数据下载、质量分析、SPP 定位及测站筛选四大核心功能，支持 GUI 与 命令行操作。
+                            </p>
+                        </div>
+                        
+                        <div class="flex flex-col gap-3">
+                            <a href="https://github.com/ChangChuntao/FAST" target="_blank" class="flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-200 transition py-2.5 px-4 rounded-lg font-bold text-sm">
+                                <i class="fab fa-github text-lg"></i> View on GitHub
+                            </a>
+                            <div class="flex gap-3 text-xs font-mono text-gray-500 justify-center">
+                                <span><i class="fas fa-star text-yellow-500 mr-1"></i>Star</span>
+                                <span><i class="fas fa-code-branch mr-1"></i>Fork</span>
+                                <span><i class="fas fa-license mr-1"></i>GPL-3.0</span>
                             </div>
                         </div>
-                        <p class="text-lg text-gray-300 mb-6 leading-relaxed">
-                            <span class="text-blue-400 font-bold">开源 GNSS 数据下载与预处理软件</span>
-                        </p>
-                        <div class="grid grid-cols-2 gap-3 mb-2 text-base font-bold text-gray-100">
-                            <div class="flex items-center gap-2"> 多源数据下载</div>
-                            <div class="flex items-center gap-2"> 数据质量分析</div>
-                            <div class="flex items-center gap-2"> 标准单点定位</div>
-                            <div class="flex items-center gap-2"> 测站查找筛选</div>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-black/20 rounded-xl p-6 border border-white/5">
+                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Core Modules & Features</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 rounded bg-white/5 hover:bg-white/10 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-cloud-download-alt text-blue-400"></i>
+                                    <span class="font-bold text-gray-200 text-sm">Data Download</span>
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    支持 IGS/WHU/COD 等 13+ 种数据源。采用多线程并发下载，自动解压 (.gz, .Z) 及格式转换 (crx2rnx)。
+                                </p>
+                            </div>
+                            <div class="p-4 rounded bg-white/5 hover:bg-white/10 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-chart-line text-green-400"></i>
+                                    <span class="font-bold text-gray-200 text-sm">Quality Analysis</span>
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    提供周跳探测 (MW/GF组合)、多路径效应分析 (Multipath)、信噪比 (CNR) 及电离层延迟率 (IOD) 可视化。
+                                </p>
+                            </div>
+                            <div class="p-4 rounded bg-white/5 hover:bg-white/10 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-map-marker-alt text-red-400"></i>
+                                    <span class="font-bold text-gray-200 text-sm">SPP Positioning</span>
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    基于双频无电离层组合模型。支持 GPS/BDS/Galileo 多系统标准单点定位，自动解算坐标与接收机钟差。
+                                </p>
+                            </div>
+                            <div class="p-4 rounded bg-white/5 hover:bg-white/10 transition">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-filter text-purple-400"></i>
+                                    <span class="font-bold text-gray-200 text-sm">Station Selection</span>
+                                </div>
+                                <p class="text-xs text-gray-400 leading-relaxed">
+                                    基于经纬度范围、天线类型及系统可见性的 IGS 测站可视化筛选工具，支持自动抽稀。
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="mt-6 flex flex-wrap gap-3">
-                        <span class="px-3 py-1 bg-blue-500/5 text-blue-400 text-[10px] border border-blue-500/20 rounded-sm mono font-bold uppercase"> PYTHON </span>
-                    </div>
                 </div>
+            </div>
+        </section>
 
-                <div class="glass-card p-10">
-                    <div>
-                        <h3 class="text-2xl font-bold text-white mb-4 italic uppercase">PANDA</h3>
-                        <p class="text-lg text-gray-300 mb-6 leading-relaxed">
-                            <span class="text-blue-400 font-bold">卫星导航精密定位定轨软件。</span>
-                        </p>
-                        <ul class="text-sm text-gray-500 space-y-2 list-disc list-inside">
-                            <li> <span class="text-gray-300">LEO/GNSS 联合快速定轨</span></li>
-                            <li> <span class="text-gray-300">LEO 电推/化推机动期间</span> 轨道确定和预报</li>
-                        </ul>
-                    </div>
-                    <span class="text-[10px] mono text-gray-700 font-black tracking-widest mt-6">HIGH-PRECISION ORBIT DETERMINATION</span>
-                </div>
-
-                <div class="glass-card p-10">
-                    <div>
-                        <h3 class="text-2xl font-bold text-white mb-4 italic uppercase">gPosPy</h3>
-                        <p class="text-gray-400 leading-relaxed text-lg mb-4">
-                            基于 Python <span class="text-white font-bold">独立开发</span> 的 PPP 软件。
-                        </p>
-                        <p class="text-sm text-gray-500">
-                            支持 <span class="text-blue-400">GPS / BDS / Galileo</span> 系统双频 PPP 解算。
-                        </p>
-                    </div>
-                    <span class="text-[10px] mono text-gray-700 font-black tracking-widest mt-6">PYTHON-BASED PPP ENGINE</span>
-                </div>
-
-                <div class="glass-card p-10">
-                    <div>
-                        <h3 class="text-2xl font-bold text-white mb-4 italic uppercase">BrdcFit</h3>
-                        <p class="text-gray-400 leading-relaxed text-lg mb-4">
-                            多类型卫星广播星历参数拟合工具。
-                        </p>
-                        <p class="text-sm text-gray-500">
-                            支持 <span class="text-white font-bold">GEO / MEO / IGSO</span> 及不同轨道高度 <span class="text-white font-bold">LEO</span> 的广播星历设计。
-                        </p>
-                    </div>
-                    <span class="text-[10px] mono text-gray-700 font-black tracking-widest mt-6">EPHEMERIS DESIGN & FITTING</span>
-                </div>
-
+        <section>
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-serif text-white">Software</h2>
+                <div class="h-px bg-white/10 flex-1"></div>
             </div>
             
-            <div class="mt-8 text-center py-4">
-                <p class="text-[10px] text-gray-700 font-bold mono uppercase tracking-widest">
-                    其他成果: CDD-GNSS下载 / GOS-陀螺定向 / AutoHAV-断面提取
-                </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card p-6 rounded-xl flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-blue-900/30 flex items-center justify-center text-blue-400 border border-blue-500/20">
+                            <i class="fas fa-satellite"></i>
+                        </div>
+                        <span class="text-[10px] font-mono border border-gray-700 rounded px-2 py-1 text-gray-400">Fortran/C++</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">PANDA</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        卫星导航精密定位定轨核心处理软件。
+                        <br><span class="text-gray-500 mt-2 block text-xs">● LEO/GNSS 联合定轨<br>● 电推/化推机动期间轨道精化</span>
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-xl flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-yellow-900/20 flex items-center justify-center text-yellow-500 border border-yellow-500/20">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <span class="text-[10px] font-mono border border-gray-700 rounded px-2 py-1 text-gray-400">Python</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">gPosPy</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        独立开发的轻量级 PPP 解算引擎。
+                        <br><span class="text-gray-500 mt-2 block text-xs">● GPS/BDS/Galileo 全系统<br>● 双频无电离层组合模型</span>
+                    </p>
+                </div>
+
+                <div class="glass-card p-6 rounded-xl flex flex-col h-full">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-lg bg-purple-900/20 flex items-center justify-center text-purple-400 border border-purple-500/20">
+                            <i class="fas fa-bezier-curve"></i>
+                        </div>
+                        <span class="text-[10px] font-mono border border-gray-700 rounded px-2 py-1 text-gray-400">Algorithm</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-100 mb-2">BrdcFit</h3>
+                    <p class="text-sm text-gray-400 leading-relaxed flex-1">
+                        多类卫星广播星历参数拟合与设计工具。
+                        <br><span class="text-gray-500 mt-2 block text-xs">● 适配 GEO/IGSO/MEO 及 LEO<br>● 广播星历参数优化生成</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex gap-4 justify-center text-xs font-mono text-gray-600">
+                <span>[Minor Tools]</span>
+                <span>CDD-GNSS下载器</span>
+                <span>GOS-陀螺定向解算</span>
+                <span>AutoHAV-断面提取</span>
             </div>
         </section>
 
         <section id="projects">
-            <div class="flex items-center gap-4 mb-12">
-                <h2 class="heading-font text-3xl font-black text-white uppercase tracking-tighter italic">02 Satellite Missions</h2>
-                <div class="h-px flex-1 bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-serif text-white">Research & Engineering</h2>
+                <div class="h-px bg-white/10 flex-1"></div>
             </div>
-            <div class="space-y-8">
-                <div class="glass-card p-10 border-l-4 border-blue-600 relative overflow-hidden h-auto">
-                    <div class="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
-                        <h3 class="text-3xl font-bold text-white uppercase tracking-tight">微厘空间一号组网卫星工程导航增强系统</h3>
-                        <span class="mono text-blue-500 font-black text-xl italic tracking-tighter">2022.01 - PRESENT</span>
+
+            <div class="space-y-6">
+                <div class="glass-card p-8 rounded-xl border-l-4 border-l-blue-500">
+                    <div class="flex flex-col md:flex-row justify-between md:items-center mb-6 gap-2">
+                        <h3 class="text-xl font-bold text-gray-100">微厘空间一号组网卫星工程导航增强系统</h3>
+                        <span class="text-xs font-mono text-blue-400 bg-blue-500/10 px-3 py-1 rounded-full">2022.01 - PRESENT</span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                        <div>
-                            <p class="text-xl text-gray-400 leading-relaxed mb-10 font-light">
-                                独立负责 <span class="text-white font-bold underline decoration-blue-500/50 decoration-4 underline-offset-8">精密定轨 (POD) 业务</span>、星历生成及质量评估全业务算法开发 。
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                        <div class="md:col-span-8">
+                            <p class="text-sm text-gray-300 mb-4 font-serif italic">
+                                "设计并实现了自主可控的低轨卫星精密定轨与星历生成系统，成功保障2025年1月组网星发射任务。"
                             </p>
-                            <div class="inline-block px-4 py-2 border border-blue-500 text-blue-500 font-black uppercase text-xs tracking-widest shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                                2025年1月组网星成功发射保障 
-                            </div>
+                            <ul class="space-y-3">
+                                <li class="flex items-start gap-3 text-sm text-gray-400">
+                                    <i class="fas fa-check-circle text-blue-500/60 mt-1"></i>
+                                    <span>
+                                        <strong class="text-gray-200">精密定轨 (POD) 算法攻关：</strong> 
+                                        针对低轨卫星动力学环境，优化了非保守力模型，实现了厘米级的事后精密定轨精度。
+                                    </span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-400">
+                                    <i class="fas fa-check-circle text-blue-500/60 mt-1"></i>
+                                    <span>
+                                        <strong class="text-gray-200">星历生成全流程研发：</strong> 
+                                        构建了从原始观测数据处理、轨道积分到广播星历参数拟合的完整业务链路。
+                                    </span>
+                                </li>
+                                <li class="flex items-start gap-3 text-sm text-gray-400">
+                                    <i class="fas fa-check-circle text-blue-500/60 mt-1"></i>
+                                    <span>
+                                        <strong class="text-gray-200">增强导航定位验证：</strong> 
+                                        基于 LEO 实测数据，评估了星地链路质量，并验证了低轨增强对 PPP 收敛时间的改善效果。
+                                    </span>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="grid grid-cols-1 gap-4 text-xs font-bold mono text-gray-600 uppercase tracking-widest">
-                            <p class="flex items-center gap-2"><i class="fas fa-satellite-dish text-blue-500/50"></i> 独立定轨业务 (POD) </p>
-                            <p class="flex items-center gap-2"><i class="fas fa-satellite-dish text-blue-500/50"></i> 星历生成全流程算法 </p>
-                            <p class="flex items-center gap-2"><i class="fas fa-satellite-dish text-blue-500/50"></i> 地面站观测数据质量评估 </p>
-                            <p class="flex items-center gap-2"><i class="fas fa-satellite-dish text-blue-500/50"></i> LEO 增强精密定位业务 </p>
+                        <div class="md:col-span-4 flex flex-col justify-center gap-2 border-t md:border-t-0 md:border-l border-white/5 md:pl-8 pt-4 md:pt-0">
+                            <h4 class="text-xs font-bold text-gray-500 uppercase">Key Contribution</h4>
+                            <span class="text-xs text-gray-400 bg-white/5 p-2 rounded block">独立定轨业务 (POD) 核心代码</span>
+                            <span class="text-xs text-gray-400 bg-white/5 p-2 rounded block">地面站观测数据质量评估系统</span>
+                            <span class="text-xs text-gray-400 bg-white/5 p-2 rounded block">星历参数拟合算法设计</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="glass-card p-8 h-auto">
-                        <h4 class="text-xl font-bold text-blue-400 mb-4 heading-font uppercase italic">XX低轨卫星轨控定轨</h4>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-6">实现基于经验力补偿的 <span class="text-white font-bold font-black">厘米级</span> 精度低轨卫星轨控期间精密定轨软件研发。</p>
-                        <span class="text-[10px] mono text-gray-700 font-black tracking-widest">2025.01 - PRESENT</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-card p-6 rounded-xl hover:border-gray-500/50 transition">
+                        <h3 class="text-lg font-bold text-gray-200 mb-2">低轨卫星轨控期间精密定轨</h3>
+                        <p class="text-xs text-gray-500 font-mono mb-4">2025.01 - PRESENT</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            针对卫星机动期间动力学模型失效问题，研发了基于<strong class="text-white">经验力补偿</strong>的定轨策略，显著提升了轨控期间的轨道连续性与精度，实现厘米级定轨。
+                        </p>
                     </div>
-                    <div class="glass-card p-8 h-auto">
-                        <h4 class="text-xl font-bold text-blue-400 mb-4 heading-font uppercase italic">海洋卫星 (HY2) 研究</h4>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-6">负责 HY2 星载 BDS-3 新频点几何观测模型精化及核心业务流程设计。</p>
-                        <span class="text-[10px] mono text-gray-700 font-black tracking-widest">2022.09 - 2023.06</span>
-                    </div>
-                    <div class="glass-card p-8 h-auto">
-                        <h4 class="text-xl font-bold text-blue-400 mb-4 heading-font uppercase italic">高轨 LT4A 定轨平台</h4>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-6">负责精密定轨业务系统流程设计、业务模块整合及软件集成测试。</p>
-                        <span class="text-[10px] mono text-gray-700 font-black tracking-widest">2022.01 - 2025.01</span>
-                    </div>
-                    <div class="glass-card p-8 h-auto">
-                        <h4 class="text-xl font-bold text-blue-400 mb-4 heading-font uppercase italic">国产系列定轨系统</h4>
-                        <p class="text-sm text-gray-500 leading-relaxed mb-6">涵盖 GF3/HY2/GF7A/ZY3C 等业务卫星的事后高精度轨道处理软件研发。</p>
-                        <span class="text-[10px] mono text-gray-700 font-black tracking-widest">2022.06 - PRESENT</span>
+
+                    <div class="glass-card p-6 rounded-xl hover:border-gray-500/50 transition">
+                        <h3 class="text-lg font-bold text-gray-200 mb-2">海洋卫星 (HY2) 星载 BDS-3 定轨</h3>
+                        <p class="text-xs text-gray-500 font-mono mb-4">2022.09 - 2023.06</p>
+                        <p class="text-sm text-gray-400 leading-relaxed">
+                            负责 HY2 星载 BDS-3 新频点几何观测模型精化。解决了新信号体制下的天线相位中心偏差（PCO/PCV）改正问题，设计了核心业务处理流程。
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="publications">
-            <div class="flex items-center gap-4 mb-12">
-                <h2 class="heading-font text-3xl font-black text-white uppercase tracking-tighter italic">03 Full Publications</h2>
-                <div class="h-px flex-1 bg-gradient-to-r from-blue-500/50 to-transparent"></div>
+            <div class="flex items-center gap-4 mb-8">
+                <h2 class="text-2xl font-serif text-white">Selected Publications</h2>
+                <div class="h-px bg-white/10 flex-1"></div>
             </div>
-            
-            <div class="space-y-6">
+
+            <div class="space-y-4">
+                <div class="flex flex-col md:flex-row gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition border-l-2 border-transparent hover:border-blue-500">
+                    <div class="flex-1">
+                        <h3 class="text-md font-bold text-gray-200 mb-2 leading-snug">
+                            Augmentation message design for LEO-enhanced precise positioning: In-orbit performance assessment.
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                            <span class="text-white">Measurement</span>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                            <span>2025</span>
+                            <span class="bg-blue-900/40 text-blue-300 paper-tag border border-blue-500/30">SCI Q2 TOP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition border-l-2 border-transparent hover:border-purple-500">
+                    <div class="flex-1">
+                        <h3 class="text-md font-bold text-gray-200 mb-2 leading-snug">
+                            FAST: An Open-Source Software for GNSS Data Download and Quality Analysis.
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                            <span class="text-white italic">GPS Solutions</span>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                            <span>Under Review</span>
+                            <span class="bg-purple-900/40 text-purple-300 paper-tag border border-purple-500/30">SCI Q1 TOP</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition border-l-2 border-transparent hover:border-gray-500">
+                    <div class="flex-1">
+                        <h3 class="text-md font-bold text-gray-300 mb-2 leading-snug">
+                            Precise orbit determination for the Haiyang-2D satellite using new onboard BDS-3 B1C/B2a signal measurements.
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                            <span class="text-white">GPS Solutions</span>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                            <span>2022</span>
+                            <span class="bg-purple-900/40 text-purple-300 paper-tag border border-purple-500/30">SCI Q1 TOP</span>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-blue-500 font-bold mb-2 tracking-widest uppercase">Measurement [2025] / 中科院二区 TOP</p>
-                    <h3 class="text-2xl font-black text-gray-200 hover:text-white transition leading-tight">
-                        Augmentation message design for LEO-enhanced precise positioning: In-orbit performance assessment.
-                    </h3>
+                 <div class="flex flex-col md:flex-row gap-4 items-start p-4 rounded-lg hover:bg-white/5 transition border-l-2 border-transparent hover:border-gray-500">
+                    <div class="flex-1">
+                        <h3 class="text-md font-bold text-gray-300 mb-2 leading-snug">
+                            LEO augmented precise point positioning using real observations from two CENTISPACE™ experimental satellites.
+                        </h3>
+                        <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                            <span class="text-white">GPS Solutions</span>
+                            <span class="w-1 h-1 bg-gray-600 rounded-full"></span>
+                            <span>2024</span>
+                            <span class="bg-purple-900/40 text-purple-300 paper-tag border border-purple-500/30">SCI Q1 TOP</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-purple-500 font-bold mb-2 tracking-widest uppercase">GPS Solutions [Under Review] / 中科院一区 TOP</p>
-                    <h3 class="text-2xl font-black text-gray-200 hover:text-white transition leading-tight italic">
-                        FAST: An Open-Source Software for GNSS Data Download and Quality Analysis.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">IEEE TIM [拟投稿] / 中科院二区</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        LEO navigation augmentation: clock synchronization and performance evaluation.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">GPS Solutions [2022] / 中科院一区 TOP</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        Precise orbit determination for the Haiyang-2D satellite using new onboard BDS-3 B1C/B2a signal measurements.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">GPS Solutions [2024] / 中科院一区 TOP</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        LEO augmented precise point positioning using real observations from two CENTISPACE™ experimental satellites.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">IEEE TGRS [2024] / 中科院一区</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        LEO Navigation Augmentation Observations for Bottomside Ionospheric Electron Content Estimation.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">测绘科学 / 中文核心</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        新太阳光压模型在GNSS定轨中的应用
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">MST / 中科院三区</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        Simulation case study of precise orbit determination for IGSO satellites using onboard Ka/GNSS observations.
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">测绘通报 / 中文核心</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        基于CGCS2000新框架的地物坐标更新策略研究与分析
-                    </h3>
-                </div>
-
-                <div class="glass-card p-8 h-auto">
-                    <p class="mono text-[10px] text-gray-500 font-bold mb-2 tracking-widest uppercase">第十二届中国卫星导航年会</p>
-                    <h3 class="text-xl font-bold text-gray-300 leading-tight">
-                        FES海潮模型对中国周边海域MGEX站点GNSS相对定位影响。
-                    </h3>
+                <div class="pt-4 border-t border-white/5 mt-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-400">
+                        <div class="flex justify-between">
+                            <span>新太阳光压模型在GNSS定轨中的应用</span>
+                            <span class="text-gray-600 text-xs font-mono pt-1">测绘科学</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Simulation case study of POD for IGSO satellites...</span>
+                            <span class="text-gray-600 text-xs font-mono pt-1">MST</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>基于CGCS2000新框架的地物坐标更新策略研究...</span>
+                            <span class="text-gray-600 text-xs font-mono pt-1">测绘通报</span>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -306,11 +442,18 @@
 
     </main>
 
-    <footer class="py-24 border-t border-gray-900 text-center relative overflow-hidden">
-
-        <div class="flex justify-center gap-8 text-[10px] text-gray-600 mono uppercase font-bold tracking-widest">
-            <span>IAG GGOS JSG3</span>
-            <span>CPGPS Forum</span>
+    <footer class="border-t border-white/10 bg-black/20 backdrop-blur-sm py-12">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-xs font-mono text-gray-600 tracking-widest uppercase mb-1">Affiliations</p>
+                <div class="flex gap-4 text-sm font-bold text-gray-400">
+                    <span>IAG GGOS JSG3</span>
+                    <span>CPGPS Forum</span>
+                </div>
+            </div>
+            <div class="text-xs text-gray-600 font-mono">
+                &copy; 2026 Chuntao Chang. Academic Profile.
+            </div>
         </div>
     </footer>
 
